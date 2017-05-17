@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Configuración de Tiendas";
+}
+<h2>@ViewBag.Title.</h2>
+<link href="@Url.Content("~/Content/bootstrap-select.min.css")" rel="stylesheet" type="text/css" />  
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+@*<script src="~/Scripts/bootstrap.min.js"></script>*@
+@*<style>
+    .form-horizontal{
+        flo:left;
+    }
+</style>*@
+<h6>Formulario para la configuración de documentos en tiendas.</h6>
+
+<div class="messagealert" id="alert_container">
+</div>
+<br />
+<div class="row">
+    <div class="form-horizontal" style="float:left">
+        <div class="form-group">
+            <label for="dwtienda" class="col-sm-2 control-label">Tienda</label>
+            <div class="col-sm-10">
+                @Html.DropDownList("dwtienda", new SelectList(ViewBag.tiendas, "COD_ENT", "DES_ENT"), "--SELECCIONE--", new { @class = "form-group selectpicker", @data_live_search = "true", @id = "dwtienda", @autofocus = "true", @onchange = "jquery_buscar()" })
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="row" >
+        <div class="col-md-9">
+            <div id="dvinfo" class="panel panel-default">
+                <div class="panel-heading">
+                    <h7 class="panel-title">
+                        Información de la tienda (Ultimos Correlativos)
+                    </h7>
+                </div>
+                <div class="panel-body" >
+                    <form class="form-horizontal" style="float:left">
+                        <div class="form-group">
+                            <label for="txttienda" class="control-label col-xs-4"> Tienda</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="text" id="txttienda" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtinterno" class="control-label col-xs-4">Nro. Interno</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" id="txtinterno" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtboleta" class="control-label col-xs-4"> Boleta</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" id="txtboleta" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtfactura" class="control-label col-xs-4"> Factura</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" id="txtfactura" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtncb" class="control-label col-xs-4"> Nota de Credito(Boleta)</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" id="txtncb" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtncf" class="control-label col-xs-4"> Nota de Credito(Factura)</label>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <input type="text" id="txtncf" readonly="readonly" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                      
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>                              
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/alertasdiag.js"></script>   
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+<script type="text/javascript">
+    var myApp;
+    myApp = myApp || (function () {
+        var pleaseWaitDiv = $('<div class="modal fade" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="basicModal" aria-hidden="true" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1 style="font-size:18px;font-weight:bold;color:#1c334f">Espere un momento por favor...</h1></div><div class="modal-body"><div class="progress progress-striped active"><div class="progress-bar" style="width: 100%;"><span class="sr-only">60% Complete</span></div></div></div></div></div></div></div></div>');
+        return {
+            showPleaseWait: function () {
+                pleaseWaitDiv.modal();
+            },
+            hidePleaseWait: function () {
+                pleaseWaitDiv.modal('hide');
+            },
+
+        };
+    })();
+    function showLoading() {
+        myApp.showPleaseWait();
+    }
+
+    function removeLoading() {
+        myApp.hidePleaseWait();
+    }
+    function limpiarobj()
+    {
+        $("#txttienda").val('');
+        $("#txtinterno").val('');
+
+        $("#txtboleta").val('');
+        $("#txtfactura").val('');
+        $("#txtncb").val('');
+        $("#txtncf").val('');
+    }
+    function jquery_buscar() {
+        //alert('ok');
+        var codtda = $('select[name=dwtienda]').val();
+        //var destda = $('select[name=dwtienda]').html();
+        var destda = $('#dwtienda').find('option:selected').text();
+        limpiarobj();
+        //alert(destda);
+        showLoading();
+        $.ajax
+        ({
+            url: '../Configuracion/getconfigtda',
+            dataType: "json",
+            type: "POST",
+            //contentType: 'application/json; charset=utf-8',
+            data: { codtda: codtda },
+            //async: true,  
+            //processData: false,  
+            // cache: false,  
+            success: function (data) {
+                removeLoading();
+                if (data.estado == '1') {                    
+                    $("#txttienda").val(destda);
+                    $("#txtinterno").val(data.interno);
+
+                    $("#txtboleta").val(data.boleta);
+                    $("#txtfactura").val(data.factura);
+                    $("#txtncb").val(data.ncboleta);
+                    $("#txtncf").val(data.ncfactura);
+
+                    //ShowMessage("ok", 'Exito');
+                    //limpiaobj();
+                }
+                else {
+
+                    ShowMessage(data.desmsg, 'Error');
+                }
+            },
+            error: function (xhr) {
+                removeLoading();
+                //ShowMessage(xhr, 'Error');
+            }
+        })
+
+
+        //ShowMessage("carganto", 'Exito');
+        //alert(codtda);
+        //showLoading();
+
+        //alert('ok');
+        //var stateId = $('#State').val();
+        //$.ajax({
+        //    url: '/Employees/FillCity',
+        //    type: "GET",
+        //    dataType: "JSON",
+        //    data: { State: stateId },
+        //    success: function (cities) {
+        //        $("#City").html(""); // clear before appending new list 
+        //        $.each(cities, function (i, city) {
+        //            $("#City").append(
+        //                $('<option></option>').val(city.CityId).html(city.CityName));
+        //        });
+        //    }
+        //});
+    }
+</script>
