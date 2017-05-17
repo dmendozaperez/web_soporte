@@ -22,5 +22,7 @@ namespace CapaEntidades
         public string CAMPA { get; set; }
         public Decimal MONTO_VALE { get; set; }
         public string EST_ID { get; set; }
+
+
     }
 }
